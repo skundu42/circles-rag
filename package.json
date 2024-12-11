@@ -13,6 +13,8 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "llamaindex": "^0.8.27"
+    "@llamaindex/readers": "^1.0.20",
+    "llamaindex": "^0.8.27",
+    "pinecone-ts-client": "^0.0.5"
   }
 }
