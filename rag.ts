@@ -26,32 +26,32 @@ async function getMarkdownFiles(dir: string): Promise<string[]> {
 
 async function main() {
   const directoryPath = "docs";
-
   const markdownFiles = await getMarkdownFiles(directoryPath);
 
-  let combinedContent = "";
+  const documents: Document[] = [];
+
   for (const filePath of markdownFiles) {
     const content = await fs.readFile(filePath, "utf-8");
-    combinedContent += content + "\n";
+    documents.push(new Document({ text: content, id_: filePath }));
   }
 
-  const document = new Document({ text: combinedContent, id_: directoryPath });
-
-  const index = await VectorStoreIndex.fromDocuments([document]);
+  const index = await VectorStoreIndex.fromDocuments(documents);
 
   const queryEngine = index.asQueryEngine();
   const { response, sourceNodes } = await queryEngine.query({
     // We need to have Eliza agent use this function and pass the query
-    query: "How to transfer personal circles tokens",
+    query: "How to setup Circles SDK with react?",
   });
 
   console.log(response);
 
   //For future implementation with Pinecone
   if (sourceNodes) {
-    sourceNodes.forEach((source: NodeWithScore, index: number) => {
+    sourceNodes.forEach((source: NodeWithScore, idx: number) => {
       console.log(
-        `\n${index}: Score: ${source.score} - ${source.node.getContent(MetadataMode.NONE).substring(0, 300)}...\n`,
+        `\n${idx}: Score: ${source.score} - ${source.node
+          .getContent(MetadataMode.NONE)
+          .substring(0, 3000)}...\n`
       );
     });
   }
