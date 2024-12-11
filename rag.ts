@@ -41,15 +41,17 @@ async function main() {
 
   const queryEngine = index.asQueryEngine();
   const { response, sourceNodes } = await queryEngine.query({
-    query: "Explain circles architecture",
+    // We need to have Eliza agent use this function and pass the query
+    query: "How to transfer personal circles tokens",
   });
 
   console.log(response);
 
+  //For future implementation with Pinecone
   if (sourceNodes) {
     sourceNodes.forEach((source: NodeWithScore, index: number) => {
       console.log(
-        `\n${index}: Score: ${source.score} - ${source.node.getContent(MetadataMode.NONE).substring(0, 150)}...\n`,
+        `\n${index}: Score: ${source.score} - ${source.node.getContent(MetadataMode.NONE).substring(0, 300)}...\n`,
       );
     });
   }
